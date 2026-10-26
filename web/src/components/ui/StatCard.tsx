@@ -58,7 +58,7 @@ export function StatCard({
           )}
         </div>
         {icon != null && (
-          <div className={`flex-shrink-0 ${iconTone[tone]}`} aria-hidden="true">
+          <div className={`warm-stat-icon flex-shrink-0 ${iconTone[tone]}`} aria-hidden="true">
             {icon}
           </div>
         )}

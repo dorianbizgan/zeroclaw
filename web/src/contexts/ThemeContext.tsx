@@ -4,11 +4,12 @@ import { colorThemeMap, DEFAULT_DARK_THEME, DEFAULT_LIGHT_THEME, type ColorTheme
 // ── Types (was ThemeContextDef.ts) ───────────────────────────────────────────
 
 export type ThemeMode = 'system' | 'dark' | 'light' | 'oled';
-export type AccentColor = 'cyan' | 'violet' | 'emerald' | 'amber' | 'rose' | 'blue';
-export type UiFont = 'system' | 'inter' | 'segoe' | 'sf';
+export type AccentColor = 'cyan' | 'violet' | 'emerald' | 'amber' | 'rose' | 'blue' | 'warm';
+export type UiFont = 'system' | 'inter' | 'segoe' | 'sf' | 'humanist';
 export type MonoFont = 'jetbrains' | 'fira' | 'cascadia' | 'system-mono';
 
 export const uiFontStacks: Record<UiFont, string> = {
+  humanist: '"Avenir Next", Avenir, "Segoe UI", system-ui, sans-serif',
   system: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
   inter: '"Inter", system-ui, sans-serif',
   segoe: '"Segoe UI", system-ui, sans-serif',
@@ -41,14 +42,14 @@ export interface ThemeContextValue {
 }
 
 export const ThemeContext = createContext<ThemeContextValue>({
-  theme: 'dark',
-  accent: 'cyan',
-  colorTheme: 'operator-dark',
-  uiFont: 'system',
-  monoFont: 'jetbrains',
+  theme: 'light',
+  accent: 'warm',
+  colorTheme: 'warm-light',
+  uiFont: 'humanist',
+  monoFont: 'system-mono',
   uiFontSize: 15,
   monoFontSize: 14,
-  resolvedTheme: 'dark',
+  resolvedTheme: 'light',
   setTheme: () => {},
   setAccent: () => {},
   setColorTheme: () => {},
@@ -112,17 +113,17 @@ interface StoredTheme {
 }
 
 const DEFAULTS: StoredTheme = {
-  theme: 'dark',
-  accent: 'cyan',
-  colorTheme: 'operator-dark',
-  uiFont: 'system',
-  monoFont: 'jetbrains',
+  theme: 'light',
+  accent: 'warm',
+  colorTheme: 'warm-light',
+  uiFont: 'humanist',
+  monoFont: 'system-mono',
   uiFontSize: 15,
   monoFontSize: 14,
 };
 
 const validThemes: ThemeMode[] = ['dark', 'light', 'oled', 'system'];
-const validAccents: AccentColor[] = ['cyan', 'violet', 'emerald', 'amber', 'rose', 'blue'];
+const validAccents: AccentColor[] = ['cyan', 'violet', 'emerald', 'amber', 'rose', 'blue', 'warm'];
 
 function migrateThemeToColorTheme(themeMode: ThemeMode): ColorThemeId {
   switch (themeMode) {
@@ -152,6 +153,10 @@ function loadStored(): StoredTheme {
       }
 
       if (themeValid && accentValid) {
+        if (['operator-dark', 'operator-light'].includes(colorTheme) && parsed.accent === 'cyan') {
+          return { theme: parsed.theme, accent: 'warm', colorTheme: colorTheme === 'operator-light' ? 'warm-light' : 'warm-dark',
+            uiFont: parsed.uiFont === 'system' ? 'humanist' : uiFont, monoFont, uiFontSize, monoFontSize };
+        }
         return { theme: parsed.theme, accent: parsed.accent, colorTheme, uiFont, monoFont, uiFontSize, monoFontSize };
       }
     }
@@ -162,6 +167,7 @@ function loadStored(): StoredTheme {
 // ── Provider ─────────────────────────────────────────────────────────────────
 
 const accents: Record<AccentColor, Record<string, string>> = {
+  warm: {},
   cyan: {
     '--pc-accent': '#22d3ee', '--pc-accent-light': '#67e8f9',
     '--pc-accent-dim': 'rgba(34,211,238,0.3)', '--pc-accent-glow': 'rgba(34,211,238,0.1)', '--pc-accent-rgb': '34,211,238',
@@ -246,6 +252,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const resolvedId = resolveColorTheme(s.theme, s.colorTheme);
     const ct = colorThemeMap[resolvedId];
     const themeVars = ct?.vars ?? colorThemeMap[DEFAULT_DARK_THEME].vars;
+    document.documentElement.toggleAttribute('data-warm-home', resolvedId.startsWith('warm-'));
+    for (const key of Object.keys(colorThemeMap['warm-light'].vars)) {
+      if (key.startsWith('--color-status-') && !(key in themeVars)) document.documentElement.style.removeProperty(key);
+    }
     applyVars({
       ...themeVars,
       ...accents[s.accent],

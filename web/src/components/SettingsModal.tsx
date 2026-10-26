@@ -14,6 +14,7 @@ const themeOptions: { value: ThemeMode; icon: typeof Sun; labelKey: string; prev
 ];
 
 const accentOptions: { value: AccentColor; color: string }[] = [
+  { value: 'warm', color: '#925136' },
   { value: 'cyan', color: '#22d3ee' },
   { value: 'violet', color: '#8b5cf6' },
   { value: 'emerald', color: '#10b981' },
@@ -23,6 +24,7 @@ const accentOptions: { value: AccentColor; color: string }[] = [
 ];
 
 const uiFontOptions: { value: UiFont; label: string; sample: string }[] = [
+  { value: 'humanist', label: 'Avenir / Humanist', sample: 'Aa' },
   { value: 'system', label: 'System', sample: 'Segoe/UI' },
   { value: 'inter', label: 'Inter', sample: 'Inter' },
   { value: 'segoe', label: 'Segoe UI', sample: 'Segoe' },

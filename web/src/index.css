@@ -783,3 +783,38 @@ code, kbd, pre {
   color: var(--pc-text-muted);
   margin-top: 0.25rem;
 }
+
+/* Warm fork: presentation only; routes, permissions and state stay upstream-owned. */
+:root[data-warm-home] {
+  --radius-sm: 7px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --pc-shadow-sm: 0 1px 3px rgb(35 32 23 / 5%);
+  --pc-shadow-md: 0 8px 28px rgb(35 32 23 / 10%);
+}
+[data-warm-home] body { -webkit-font-smoothing: antialiased; }
+[data-warm-home] .warm-page-title {
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 1.75rem;
+  font-weight: 500;
+  letter-spacing: -.025em;
+  line-height: 1.2;
+}
+[data-warm-home] header { box-shadow: 0 1px 0 var(--pc-border); }
+[data-warm-home] .chat-markdown { line-height: 1.75; }
+[data-warm-home] .warm-stat-icon,
+[data-warm-home] .warm-agent-symbol,
+[data-warm-home] .warm-agent-facts svg,
+[data-warm-home] .warm-agent-state svg { display: none; }
+[data-warm-home] textarea { line-height: 1.6; }
+@media (max-width: 639px) {
+  [data-warm-home] input:not([type=checkbox]):not([type=radio]),
+  [data-warm-home] textarea, [data-warm-home] select { font-size: 16px; }
+}
+/* Without decorative fact icons, show the fact captions together or omit the
+   compact facts; never leave an unexplained row of numbers on small screens. */
+[data-warm-home] .warm-agent-facts { display: none; }
+@media (min-width: 1024px) {
+  [data-warm-home] .warm-agent-facts { display: flex; }
+}

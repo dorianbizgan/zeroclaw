@@ -69,7 +69,7 @@ export default function AgentCard({ agent, onSelect, selected = false }: AgentCa
       aria-haspopup="dialog"
       aria-label={`${t('agentcard.open_detail_prefix')} ${agent.alias} ${t('agentcard.open_detail_suffix')}`}
       className={[
-        'group w-full flex items-center gap-3 px-4 py-3 text-left',
+        'warm-agent-card group w-full flex items-center gap-3 px-4 py-3 text-left',
         'border-b border-pc-border last:border-b-0',
         'transition-colors duration-150 cursor-pointer',
         'hover:bg-[var(--pc-hover)]',
@@ -80,7 +80,7 @@ export default function AgentCard({ agent, onSelect, selected = false }: AgentCa
         .join(' ')}
     >
       {/* Identity */}
-      <div className="h-8 w-8 rounded-[var(--radius-md)] flex-shrink-0 flex items-center justify-center bg-pc-accent/10">
+      <div className="warm-agent-symbol h-8 w-8 rounded-[var(--radius-md)] flex-shrink-0 flex items-center justify-center bg-pc-accent/10">
         <Bot className="h-4 w-4 text-pc-accent" />
       </div>
       <div className="min-w-0 flex-1">
@@ -88,7 +88,7 @@ export default function AgentCard({ agent, onSelect, selected = false }: AgentCa
           <span className="text-sm font-semibold truncate text-pc-text">
             {agent.alias}
           </span>
-          <Badge tone={agent.enabled ? 'ok' : 'neutral'} className="flex-shrink-0">
+          <Badge tone={agent.enabled ? 'ok' : 'neutral'} className="warm-agent-state flex-shrink-0">
             <Power className="h-3 w-3" />
             {agent.enabled ? t('agent.enabled') : t('agent.disabled')}
           </Badge>
@@ -99,7 +99,7 @@ export default function AgentCard({ agent, onSelect, selected = false }: AgentCa
       </div>
 
       {/* Inline facts — hidden on the narrowest viewports to keep the row clean */}
-      <div className="hidden sm:flex items-center gap-4 flex-shrink-0">
+      <div className="warm-agent-facts hidden sm:flex items-center gap-4 flex-shrink-0">
         <RowFact
           icon={Wifi}
           value={channelCount}
